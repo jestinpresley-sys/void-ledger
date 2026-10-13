@@ -22,7 +22,7 @@ export default function Account() {
     return (
       <div className="stack" style={{ maxWidth: 640 }}>
         <h1>Accounts are off</h1>
-        <p className="lede">This copy of Void Ledger has no Supabase keys, so everything you track is saved in this browser only. Add <code>VITE_SUPABASE_URL</code> and <code>VITE_SUPABASE_ANON_KEY</code> to <code>.env</code> to turn on sign-in and cloud sync. The README walks through it.</p>
+        <p className="lede">This copy of Void Ledger has no Supabase keys, so everything you track is saved in this browser only. Add <code>VITE_SUPABASE_URL</code> and <code>VITE_SUPABASE_PUBLISHABLE_KEY</code> to <code>.env</code> to turn on sign-in and cloud sync. The README walks through it.</p>
       </div>
     );
   }

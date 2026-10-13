@@ -26,11 +26,18 @@ That's enough to use the app with browser-only saving.
 
 1. Create a free project at [supabase.com](https://supabase.com).
 2. In the dashboard open **SQL Editor → New query**, paste all of `supabase/schema.sql`, and run it.
-3. Open **Project Settings → API**, then copy `.env.example` to `.env` and fill in:
-   ```
-   VITE_SUPABASE_URL=https://YOUR-PROJECT.supabase.co
-   VITE_SUPABASE_ANON_KEY=your-anon-public-key
-   ```
+3. Connect the app to your project:
+   1. In your project dashboard, click **Connect** at the top. It shows your **Project URL** (`https://xxxx.supabase.co`) and **Publishable key** (starts with `sb_publishable_`). The same key is also under **Settings → API Keys**.
+   2. In the project folder, make a copy of `.env.example` named `.env`:
+      ```bash
+      cp .env.example .env
+      ```
+   3. Open `.env` and paste the two values after the `=` signs, with no quotes or spaces:
+      ```
+      VITE_SUPABASE_URL=https://xxxx.supabase.co
+      VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
+      ```
+   The publishable key is safe in browser code; row-level security from step 2 decides what each player can read and write. Never put the **secret** key (`sb_secret_...`) or the legacy `service_role` key in `.env`. Older projects that only show a legacy **anon** key can paste it as the publishable key; it works the same way. `.env` is git-ignored, so the keys won't be committed.
 4. **Authentication → URL Configuration**: set *Site URL* to where the app runs (`http://localhost:5173` while developing, your real domain once deployed) and add both to *Redirect URLs*.
 5. Optional Discord login: **Authentication → Providers → Discord**. Create an app at the [Discord Developer Portal](https://discord.com/developers/applications), add the callback URL Supabase shows you as a redirect there, and paste the client ID and secret into Supabase.
 6. Restart `npm run dev`.
@@ -41,7 +48,7 @@ Row-level security is on for every table: players can only read and change their
 
 It's a static site. `npm run build` writes `dist/`.
 
-- **Vercel**: import the repo; the framework preset is Vite. Add the two `VITE_SUPABASE_*` variables under Environment Variables. `vercel.json` handles page routes.
+- **Vercel**: import the repo; the framework preset is Vite. Add `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` under Environment Variables. `vercel.json` handles page routes.
 - **Netlify**: build command `npm run build`, publish directory `dist`, same env variables. `public/_redirects` handles page routes.
 - **GitHub Pages** works too, but needs a 404.html copy of index.html for deep links.
 
