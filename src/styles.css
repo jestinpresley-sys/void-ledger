@@ -210,6 +210,12 @@ tr.hit td { background: var(--void-soft); }
 .shard { width: 54px; height: 54px; border-radius: 8px; border: 1px dashed var(--line); background: var(--sunk); cursor: pointer; display: grid; place-items: center; font-family: var(--f-data); font-weight: 700; font-size: .7rem; text-transform: uppercase; }
 .shard.filled { border-style: solid; color: #fff; text-shadow: 0 1px 2px rgb(0 0 0 / .4); }
 .shard.picked { box-shadow: 0 0 0 2px var(--void); }
+.statboard { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px 14px; }
+@media (max-width: 640px) { .statboard { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.stat { display: flex; flex-direction: column; min-width: 0; }
+.stat .num { font-size: 1.25rem; line-height: 1.2; }
+.stat .num.up { color: var(--good); } .stat .num.down { color: var(--bad); }
+.stat .was { font-size: .76rem; }
 .statgrid { display: grid; grid-template-columns: auto 1fr; gap: 2px 14px; font-size: .9rem; }
 .statgrid dt { color: var(--muted); }
 .statgrid dd { margin: 0; text-align: right; font-family: var(--f-data); font-weight: 600; }

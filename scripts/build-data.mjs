@@ -175,6 +175,11 @@ write("arcanes.json", arcanes);
 const shardFile = path.join(pkgDir("warframe-worldstate-data"), "dist", "data", "archonShards.json");
 const shardsRaw = JSON.parse(fs.readFileSync(shardFile, "utf8"));
 const fixText = s => s.replace(/Sheild/g, "Shield").replace(/Enery/g, "Energy").replace(/DmgCorrosiveSmall64 /g, "").replace(/\s+/g, " ").trim();
+// The source lists Azure's health bonus as a percentage; in game it's flat (+150 / +225), like its other stats.
+const shardText = (color, text) => {
+  const t = fixText(text).replace(/^(\d)/, "+$1"); // a few lines are missing their "+"
+  return color === "Azure" ? t.replace(/^\+(\d+(?:\.\d+)?)% Health$/, "+$1 Health") : t;
+};
 const shards = [];
 for (const [key, v] of Object.entries(shardsRaw)) {
   if (key.endsWith("_MYTHIC")) continue;
@@ -183,7 +188,7 @@ for (const [key, v] of Object.entries(shardsRaw)) {
     color: v.value,
     // tauforged stats are listed in the same order as the regular ones
     stats: Object.entries(v.upgradeTypes).map(([id, u], i) => ({
-      id, text: fixText(u.value), tau: tau ? fixText(Object.values(tau.upgradeTypes)[i]?.value ?? "") : "",
+      id, text: shardText(v.value, u.value), tau: tau ? shardText(v.value, Object.values(tau.upgradeTypes)[i]?.value ?? "") : "",
     })),
   });
 }

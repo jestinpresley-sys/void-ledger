@@ -5,6 +5,7 @@ import { CATEGORY_LABEL, type CollectionItem, type Mod } from "../lib/data";
 import { POLARITIES, computeCapacity, formaCount, modDrain, bonusCapacity, normPolarity, polarityMatch, type SlotState } from "../lib/capacity";
 import { LAYOUT, arcanesFor, decodeBuild, encodeBuild, equippedNames, familyOf, modsFor, newBuild, type Build, type BuildData } from "../lib/builds";
 import { supabase } from "../lib/supabase";
+import { STAT_LABEL, warframeStats } from "../lib/stats";
 import { useStore } from "../lib/store";
 
 type Sel =
@@ -176,6 +177,8 @@ function Editor({ initial }: { initial: Loaded }) {
             </div>
           </div>
 
+          {isWarframe && <StatsPanel item={item} data={data} />}
+
           {/* Slots */}
           <div className="pane stack" style={{ gap: 10 }}>
             {(layout.bonus || layout.exilus) && (
@@ -259,16 +262,6 @@ function Editor({ initial }: { initial: Loaded }) {
           {editable
             ? <Picker sel={sel} item={item} data={data} slot={slotOf(sel)} setSlot={fn => setSlot(sel, fn)} edit={edit} />
             : <ReadOnlySummary item={item} data={data} />}
-          {isWarframe && item.health !== undefined && (
-            <div style={{ marginTop: 16 }}>
-              <h3>Base stats at rank 30</h3>
-              <dl className="statgrid">
-                <dt>Health</dt><dd>{item.health}</dd><dt>Shields</dt><dd>{item.shield}</dd>
-                <dt>Armor</dt><dd>{item.armor}</dd><dt>Energy</dt><dd>{item.energy}</dd>
-              </dl>
-              <p className="note" style={{ marginBottom: 0 }}>Before mods, shards and arcanes.</p>
-            </div>
-          )}
         </div>
       </div>
     </div>
@@ -451,6 +444,45 @@ function ReadOnlySummary({ item, data }: { item: CollectionItem; data: BuildData
       </ul>
       {data.arcanes.some(Boolean) && <><h3 style={{ marginTop: 14 }}>Arcanes</h3><p style={{ margin: 0 }}>{data.arcanes.filter(Boolean).join(", ")}</p></>}
       <p className="note">Viewing a {CATEGORY_LABEL[item.cat].toLowerCase()} build. Save a copy to change it.</p>
+    </div>
+  );
+}
+
+function StatsPanel({ item, data }: { item: CollectionItem; data: BuildData }) {
+  const { modsById, shards } = useGame();
+  const s = warframeStats(item, data, modsById, shards);
+  const show = (v: number, pct: boolean) => pct ? `${Number.isInteger(v) ? v : v.toFixed(1)}%` : v.toLocaleString();
+  const anySource = s.rows.some(r => r.sources.length);
+  return (
+    <div className="pane">
+      <div className="row spread" style={{ marginBottom: 10 }}>
+        <span className="label">Stats at rank 30</span>
+        <span className="note">{Math.round(s.damageReduction * 1000) / 10}% damage reduction · {s.effectiveHealth.toLocaleString()} effective health</span>
+      </div>
+      <div className="statboard">
+        {s.rows.map(r => {
+          const changed = r.final !== r.base;
+          const up = r.final > r.base;
+          return (
+            <div key={r.key} className="stat" title={r.sources.map(x => `${x.name} ${x.text}`).join("\n") || "No bonuses"}>
+              <span className="note">{STAT_LABEL[r.key]}</span>
+              <span className={`num ${changed ? (up ? "up" : "down") : ""}`}>{show(r.final, r.pct)}</span>
+              {changed && <span className="note was">from {show(r.base, r.pct)}{r.capped ? ` · ${r.capped.toLowerCase()}` : ""}</span>}
+            </div>
+          );
+        })}
+      </div>
+      {anySource && (
+        <details style={{ marginTop: 10 }}>
+          <summary className="note" style={{ cursor: "pointer" }}>Where these numbers come from</summary>
+          <ul className="note" style={{ margin: "6px 0 0", paddingLeft: 18 }}>
+            {s.rows.filter(r => r.sources.length).map(r => (
+              <li key={r.key}><b>{STAT_LABEL[r.key]}:</b> {r.sources.map(x => `${x.name} ${x.text}`).join(", ")}</li>
+            ))}
+          </ul>
+        </details>
+      )}
+      <p className="note" style={{ margin: "8px 0 0" }}>Includes mods at their set rank and Archon Shards. Arcanes, aura effects, set bonuses and other conditional effects aren't counted.</p>
     </div>
   );
 }

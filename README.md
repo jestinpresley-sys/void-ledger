@@ -3,7 +3,7 @@
 A Warframe companion for tracking what you own, planning Prime farms and saving builds.
 
 - **Collection** – every Warframe, weapon, companion and vehicle, marked Need / Own / Mastered, with mastery totals and links to where missing items drop.
-- **Builds** – a mod editor with real capacity math: slot polarities and Forma, aura and stance bonuses, mod ranks, exilus, arcanes, Archon Shards (including Tauforged) and Helminth. Save builds, share them by link, and browse builds other players made public.
+- **Builds** – a mod editor with real capacity math: slot polarities and Forma, aura and stance bonuses, mod ranks, exilus, arcanes, Archon Shards (including Tauforged) and Helminth. Warframe builds show final Health, Shields, Armor, Energy and ability stats as you mod, with damage reduction and effective health. Save builds, share them by link, and browse builds other players made public.
 - **Where to farm** – drop chances for about 3,000 items, mods, Prime parts and relics, with the number of runs for a 90% chance.
 - **Prime sets** – tick off parts you own; vaulted relics are marked.
 - **Fissures** – live Void Fissures (normal, Steel Path, Void Storms), with the tiers you need for your wishlist highlighted and a ranked list of relics to crack.
@@ -66,7 +66,7 @@ Run it after each Warframe update, then commit the changed files. Item images lo
 ## Tests
 
 ```bash
-npm test           # capacity math, mod compatibility, share links
+npm test           # capacity math, stat math, mod compatibility, share links
 npm run typecheck
 ```
 
@@ -74,5 +74,5 @@ npm run typecheck
 
 - Helminth lists every ability of each donor frame; the app doesn't yet know which single ability each frame gives Helminth, or Helminth's own abilities.
 - Melee stance slots accept any stance; the data doesn't say which weapon class each melee weapon belongs to.
-- Build stats show base Warframe values; they don't yet apply mod, shard or arcane bonuses.
+- Warframe stats count mods and Archon Shards, not arcanes, aura effects, set bonuses or other conditional effects. Weapon builds don't show damage numbers yet.
 - Rivens, Kitgun/Zaw parts, Railjack and Operator/Amp builds aren't covered.

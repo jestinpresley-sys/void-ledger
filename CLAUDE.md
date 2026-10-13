@@ -12,6 +12,7 @@ Warframe collection tracker, farming planner and build editor. Vite + React 19 +
 - `scripts/build-data.mjs` — the only place game data is shaped. Change output shapes here and in `src/lib/data.ts` together.
 - `src/lib/data.ts` — data types + loader (fetches /data/*.json once).
 - `src/lib/capacity.ts` — mod capacity rules. Keep tests in `capacity.test.ts` in step with any rule change.
+- `src/lib/stats.ts` — final Warframe stats (rank-30 bases, mod % by rank, shards, caps). Tests in `stats.test.ts`.
 - `src/lib/builds.ts` — BuildData shape (`version: 1`), slot layouts per category, which mods/arcanes fit which item, share-code encoding. If BuildData changes, bump `version` and migrate old builds on load; saved builds and share links contain it.
 - `src/lib/store.tsx` — user data. Signed in → Supabase tables; signed out → localStorage key `void-ledger:v1`. Mutations are optimistic.
 - `src/lib/fissures.ts` — live fissures from api.warframestat.us.
