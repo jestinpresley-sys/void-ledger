@@ -1,10 +1,11 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { Art, useGame, useToast } from "../components/ui";
 import { farmLink } from "../components/farm";
 import { CATEGORY_LABEL, masteryPoints, type Category, type CollectionItem } from "../lib/data";
 import { canBuild } from "../lib/builds";
 import { useStore, type Status } from "../lib/store";
+import QuickSetup from "../components/QuickSetup";
 
 const GROUPS: { key: string; label: string; cats: Category[] }[] = [
   { key: "warframe", label: "Warframes", cats: ["warframe"] },
@@ -28,6 +29,10 @@ export default function Collection() {
   const [sort, setSort] = useState<Sort>("name");
   const [primeOnly, setPrimeOnly] = useState(false);
   const [confirmBulk, setConfirmBulk] = useState<Status | "clear" | null>(null);
+  const [setupOpen, setSetupOpen] = useState(false);
+  // Open Quick setup once for players who haven't marked anything; it stays open until they close it.
+  const emptyOnLoad = ready && Object.keys(state.collection).length === 0;
+  useEffect(() => { if (emptyOnLoad) setSetupOpen(true); }, [emptyOnLoad]);
 
   const statusOf = (i: CollectionItem) => state.collection[i.id];
 
@@ -71,7 +76,10 @@ export default function Collection() {
     <div className="stack">
       <div className="page-head">
         <div><h1>Collection</h1><p className="lede">Mark what you own and what you've mastered. Missing items link to where they drop.</p></div>
+        {!setupOpen && <button className="btn" onClick={() => setSetupOpen(true)}>Quick setup</button>}
       </div>
+
+      {setupOpen && <QuickSetup onClose={() => setSetupOpen(false)} />}
 
       <div className="meters">
         <div className="meter"><div className="label">Owned</div><div className="big">{summary.owned}<span className="note"> / {summary.total}</span></div><div className="bar gold"><i style={{ width: `${(summary.owned / summary.total) * 100}%` }} /></div></div>

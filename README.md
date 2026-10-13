@@ -2,7 +2,7 @@
 
 A Warframe companion for tracking what you own, planning Prime farms and saving builds.
 
-- **Collection** – every Warframe, weapon, companion and vehicle, marked Need / Own / Mastered, with mastery totals and links to where missing items drop.
+- **Collection** – every Warframe, weapon, companion and vehicle, marked Need / Own / Mastered, with mastery totals and links to where missing items drop. Quick setup fills it in fast: paste a list of names (typos are caught), or mark whole groups by rule, such as all non-Primes up to a Mastery Rank.
 - **Builds** – a mod editor with real capacity math: slot polarities and Forma, aura and stance bonuses, mod ranks, exilus, arcanes, Archon Shards (including Tauforged) and Helminth. Warframe builds show final Health, Shields, Armor, Energy and ability stats as you mod, with damage reduction and effective health. Save builds, share them by link, and browse builds other players made public.
 - **Where to farm** – drop chances for about 3,000 items, mods, Prime parts and relics, with the number of runs for a 90% chance.
 - **Prime sets** – tick off parts you own; vaulted relics are marked.
@@ -66,7 +66,7 @@ Run it after each Warframe update, then commit the changed files. Item images lo
 ## Tests
 
 ```bash
-npm test           # capacity math, stat math, mod compatibility, share links
+npm test           # capacity math, stat math, list matching, mod compatibility, share links
 npm run typecheck
 ```
 

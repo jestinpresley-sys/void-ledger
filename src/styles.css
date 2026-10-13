@@ -97,6 +97,7 @@ textarea.input { resize: vertical; min-height: 80px; }
 .linkbtn:hover { text-decoration: underline; }
 .linkbtn:focus-visible { outline: 2px solid var(--void); }
 .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; flex-wrap: wrap; }
+.stack > .seg { align-self: flex-start; }
 .seg button { font-family: var(--f-data); font-weight: 600; font-size: .8rem; letter-spacing: .06em; text-transform: uppercase; border: 0; background: none; color: var(--muted); padding: 5px 11px; cursor: pointer; }
 .seg button[aria-pressed="true"] { background: var(--gold-soft); color: var(--gold); }
 .check { width: 18px; height: 18px; accent-color: var(--gold); flex: none; }
